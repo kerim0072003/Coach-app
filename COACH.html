@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>COACH — Fitness</title>
+<style>
+:root{--bg:#090b0e;--card:#14171c;--card2:#101318;--text:#f4f6f8;--muted:#98a1ad;--line:#272d36;--a:#7dd3fc;--ok:#86efac;--warn:#facc15}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:1100px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}h1{margin:0;font-size:28px}.sub{color:var(--muted);font-size:13px}nav{display:flex;gap:7px;overflow:auto;margin-bottom:15px}button{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:11px;padding:10px 13px;cursor:pointer}button.active{background:var(--a);color:#071018;border-color:var(--a);font-weight:700}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:16px;margin-bottom:12px}.v{font-size:26px;font-weight:800;margin-top:4px}.label{font-size:12px;color:var(--muted)}.two{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#12321f;color:var(--ok);font-size:12px}.bar{height:9px;background:#272d35;border-radius:9px;overflow:hidden;margin:9px 0}.fill{height:100%;background:var(--a);width:0}.form{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}label{font-size:12px;color:var(--muted)}input,select{width:100%;margin-top:5px;padding:10px;border-radius:9px;border:1px solid var(--line);background:#0c0f13;color:var(--text)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.note{color:var(--muted);line-height:1.5;font-size:14px}.coach{font-size:15px;line-height:1.55}.danger{color:var(--warn)}canvas{width:100%;height:210px;background:var(--card2);border-radius:12px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:9px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.photo{border:1px dashed var(--line);padding:16px;border-radius:12px}.hidden{display:none}@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.form{grid-template-columns:1fr 1fr}}
+</style></head><body><div class="app">
+<div class="top"><div><h1>COACH</h1><div class="sub">Cut · Training · Ernährung · Fortschritt</div></div><span class="pill" id="mode">CUT</span></div>
+<nav id="nav"></nav>
+
+<section id="dashboard">
+<div class="grid">
+<div class="card"><div class="label">Gewicht</div><div class="v" id="dashWeight">66,6 kg</div><div class="sub">heute</div></div>
+<div class="card"><div class="label">7-Tage-Schnitt</div><div class="v" id="avg">—</div><div class="sub">automatisch</div></div>
+<div class="card"><div class="label">Kalorienziel</div><div class="v" id="dashCal">1.900</div><div class="sub">kcal</div></div>
+<div class="card"><div class="label">Protein</div><div class="v">140 g</div><div class="sub">Ziel</div></div></div>
+<div class="two">
+<div class="card"><h2>Heute</h2><div class="row"><span>Schritte</span><b id="dashSteps">20.000</b></div><div class="row"><span>Cardio</span><b id="dashCardio">0 / 100 min</b></div><div class="row"><span>Kalorien</span><b id="dashEaten">0 / 1.900</b></div><div class="bar"><div class="fill" id="calFill"></div></div></div>
+<div class="card"><h2>Coach</h2><div class="coach" id="coachText"></div></div></div>
+<div class="card"><h2>Gewichtsverlauf</h2><canvas id="chart" width="900" height="210"></canvas></div>
+</section>
+
+<section id="nutrition" class="hidden"><div class="card"><h2>Ernährung</h2><div class="form">
+<label>Kalorien<input id="calIn" type="number" value="1900"></label><label>Protein (g)<input id="proIn" type="number" value="140"></label><label>Kohlenhydrate (g)<input id="carbIn" type="number" value="210"></label><label>Fett (g)<input id="fatIn" type="number" value="55"></label><label>Heute gegessen (kcal)<input id="eatenIn" type="number" value="0"></label></div>
+<div class="actions"><button onclick="saveNutrition()">Ziele speichern</button><button onclick="addMeal()">+ 100 kcal</button></div><p class="note" id="macroNote"></p></div></section>
+
+<section id="training" class="hidden"><div class="two"><div class="card"><h2>Wochenplan</h2><table class="table"><tr><th>Tag</th><th>Einheit</th></tr><tr><td>Mo</td><td>Brust + Rücken</td></tr><tr><td>Di</td><td>Schultern + Arme</td></tr><tr><td>Mi</td><td>Beine + Bauch</td></tr><tr><td>Do</td><td>Pause</td></tr><tr><td>Fr</td><td>Brust + Rücken + Schultern</td></tr><tr><td>Sa</td><td>Bizeps + Trizeps + Beine</td></tr><tr><td>So</td><td>Pause</td></tr></table></div>
+<div class="card"><h2>Trainingslog</h2><div class="form"><label>Übung<input id="ex" placeholder="Bankdrücken"></label><label>kg<input id="kg" type="number"></label><label>Wdh.<input id="reps" type="number"></label></div><div class="actions"><button onclick="logSet()">Satz speichern</button></div><div id="log"></div></div></div></section>
+
+<section id="progress" class="hidden"><div class="two"><div class="card"><h2>Gewicht eintragen</h2><div class="form"><label>Gewicht<input id="weightIn" type="number" step=".1" value="66.6"></label><label>Datum<input id="dateIn" type="date"></label></div><div class="actions"><button onclick="addWeight()">Speichern</button></div></div>
+<div class="card"><h2>Cut-Status</h2><div class="row"><span>Start</span><b id="startW">—</b></div><div class="row"><span>Aktuell</span><b id="curW">—</b></div><div class="row"><span>Differenz</span><b id="diffW">—</b></div></div></div><div class="card"><h2>Check-in-Verlauf</h2><div id="history"></div></div></section>
+
+<section id="checkin" class="hidden"><div class="card"><h2>Täglicher Check-in</h2><div class="form"><label>Gewicht<input id="cw" type="number" step=".1" value="66.6"></label><label>Schlaf (h)<input id="sleep" type="number" step=".5" value="8"></label><label>Energie 1–10<input id="energy" type="number" min="1" max="10" value="7"></label><label>Hunger 1–10<input id="hunger" type="number" min="1" max="10" value="5"></label><label>Schritte<input id="stepsIn" type="number" value="20000"></label><label>Cardio (min)<input id="cardioIn" type="number" value="0"></label></div><div class="actions"><button onclick="saveCheckin()">Check-in speichern</button></div><p id="checkMsg" class="note"></p></div></section>
+
+<section id="settings" class="hidden"><div class="card"><h2>Ziele & Coach-Regeln</h2><div class="form"><label>Ziel-KFA (%)<input id="kfa" type="number" value="10"></label><label>Reverse ab KFA (%)<input id="revKfa" type="number" value="10"></label><label>Schrittziel<input id="stepGoal" type="number" value="20000"></label></div><div class="actions"><button onclick="saveSettings()">Speichern</button><button onclick="resetAll()">Daten zurücksetzen</button></div><p class="note">Die App bewertet Trends, nicht einzelne Tageswerte. Keine automatische medizinische Beratung.</p></div></section>
+</div>
+<script>
+const tabs=[["dashboard","Dashboard"],["nutrition","Ernährung"],["training","Training"],["progress","Fortschritt"],["checkin","Check-in"],["settings","Einstellungen"]];
+const nav=document.getElementById("nav"); tabs.forEach((t,i)=>{let b=document.createElement("button");b.textContent=t[1];b.className=i===0?"active":"";b.onclick=()=>show(t[0],b);nav.appendChild(b)});
+let data=JSON.parse(localStorage.getItem("coachV2")||'{"weights":[{"d":"2026-08-19","w":68},{"d":"2026-08-28","w":66.2},{"d":"2026-08-30","w":66.6}],"cal":1900,"protein":140,"carb":210,"fat":55,"eaten":0,"steps":20000,"cardio":0,"stepGoal":20000,"kfa":10,"revKfa":10,"logs":[]}');
+function save(){localStorage.setItem("coachV2",JSON.stringify(data))}
+function show(id,b){document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");render()}
+function avg(){let a=data.weights.slice(-7).map(x=>x.w);return a.length?(a.reduce((x,y)=>x+y,0)/a.length).toFixed(2):"—"}
+function render(){document.getElementById("dashWeight").textContent=(data.weights.at(-1)?.w??0).toFixed(1).replace(".",",")+" kg";document.getElementById("avg").textContent=avg()+" kg";document.getElementById("dashCal").textContent=data.cal.toLocaleString("de-DE");document.getElementById("dashSteps").textContent=data.steps.toLocaleString("de-DE");document.getElementById("dashCardio").textContent=data.cardio+" / 100 min";document.getElementById("dashEaten").textContent=data.eaten+" / "+data.cal;document.getElementById("calFill").style.width=Math.min(100,data.eaten/data.cal*100)+"%";
+let a=data.weights.slice(-7).map(x=>x.w), text="Trend nicht ausreichend.";if(a.length>=3){let d=a.at(-1)-a[0];text=d<-.1?`Der Gewichtstrend fällt (${d.toFixed(1)} kg im aktuellen Datensatz). Kalorien nicht vorschnell weiter reduzieren.`:Math.abs(d)<=.1?"Gewicht aktuell weitgehend stabil. Noch mehrere Tage sammeln, bevor du etwas änderst.":"Gewicht steigt im Datensatz. Erst prüfen: Kalorien-Tracking, Salz, Kohlenhydrate und Wasser.";if(data.kfa<=data.revKfa)text+=" Zielbereich für die Reverse Diet erreicht – Übergang kontrolliert planen."}document.getElementById("coachText").textContent=text;
+document.getElementById("macroNote").textContent=`Makros: ${data.protein} g Protein · ${data.carb} g Kohlenhydrate · ${data.fat} g Fett. Restliche Kalorien werden aus den gespeicherten Zielen berechnet.`;
+document.getElementById("startW").textContent=(data.weights[0]?.w??0).toFixed(1)+" kg";document.getElementById("curW").textContent=(data.weights.at(-1)?.w??0).toFixed(1)+" kg";document.getElementById("diffW").textContent=((data.weights.at(-1)?.w||0)-(data.weights[0]?.w||0)).toFixed(1)+" kg";
+document.getElementById("history").innerHTML=data.weights.slice().reverse().map(x=>`<div class="row"><span>${x.d}</span><b>${x.w.toFixed(1)} kg</b></div>`).join("")||"Noch keine Daten";
+document.getElementById("log").innerHTML=data.logs.slice(-8).reverse().map(x=>`<div class="row"><span>${x.ex}</span><b>${x.kg} kg × ${x.reps}</b></div>`).join("");
+draw()}
+function draw(){let c=document.getElementById("chart"),x=c.getContext("2d");x.clearRect(0,0,c.width,c.height);let a=data.weights.map(z=>z.w);if(!a.length)return;let mn=Math.min(...a)-.3,mx=Math.max(...a)+.3;x.strokeStyle="#7dd3fc";x.lineWidth=4;x.beginPath();a.forEach((v,i)=>{let px=45+i*(810/Math.max(1,a.length-1)),py=175-(v-mn)/(mx-mn)*135;i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke();x.fillStyle="#98a1ad";x.font="13px sans-serif";x.fillText("Gewicht (kg)",45,25)}
+function saveNutrition(){data.cal=+calIn.value;data.protein=+proIn.value;data.carb=+carbIn.value;data.fat=+fatIn.value;data.eaten=+eatenIn.value;save();render()}
+function addMeal(){data.eaten=Math.min(data.cal,data.eaten+100);eatenIn.value=data.eaten;save();render()}
+function addWeight(){let d=dateIn.value||new Date().toISOString().slice(0,10),w=+weightIn.value;if(w){data.weights.push({d,w});data.weights.sort((a,b)=>a.d.localeCompare(b.d));save();render()}}
+function saveCheckin(){let w=+cw.value;if(w)addWeight();data.steps=+stepsIn.value;data.cardio=+cardioIn.value;save();checkMsg.textContent="Check-in gespeichert. Der Coach nutzt den Trend für die nächste Bewertung.";render()}
+function logSet(){if(ex.value&&kg.value&&reps.value){data.logs.push({ex:ex.value,kg:+kg.value,reps:+reps.value});save();render()}}
+function saveSettings(){data.kfa=+kfa.value;data.revKfa=+revKfa.value;data.stepGoal=+stepGoal.value;save();render()}
+function resetAll(){if(confirm("Alle gespeicherten App-Daten löschen?")){localStorage.removeItem("coachV2");location.reload()}}
+dateIn.value=new Date().toISOString().slice(0,10);render();
+</script></body></html>
